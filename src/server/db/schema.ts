@@ -3,9 +3,9 @@
 
 import { sql } from "drizzle-orm";
 import {
-  index,
-  pgTableCreator,
+  pgTable,
   serial,
+  text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -16,19 +16,22 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `url-shortener_${name}`);
+export const urls = pgTable("url", {
+    id: varchar('id', { length: 8 }).primaryKey(),
+    link: text('link').notNull(),
+    created_at: timestamp('created_at', { withTimezone: false })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull()
+  }
+);
 
-export const posts = createTable(
-  "post",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
+export const visits = pgTable("visit", {
+    id: serial('id').primaryKey(),
+    url_id: text('url_id').references(() => urls.id ).notNull(),
+    accessed: timestamp('accessed', { withTimezone: false })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true }),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+    browser: varchar('browser', { length: 8 }),
+    location: varchar('location', { length: 100 }),
+  }
 );
