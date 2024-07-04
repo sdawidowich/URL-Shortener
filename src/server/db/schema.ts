@@ -20,18 +20,14 @@ export const urls = pgTable("url", {
     id: varchar('id', { length: 8 }).primaryKey(),
     link: text('link').notNull(),
     created_at: timestamp('created_at', { withTimezone: false })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull()
   }
 );
 
 export const visits = pgTable("visit", {
     id: serial('id').primaryKey(),
     url_id: text('url_id').references(() => urls.id ).notNull(),
-    accessed: timestamp('accessed', { withTimezone: false })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    browser: varchar('browser', { length: 8 }),
-    location: varchar('location', { length: 100 }),
+    accessed: timestamp('accessed', { withTimezone: false }),
+    browser: text('browser'),
+    location: text('location'),
   }
 );

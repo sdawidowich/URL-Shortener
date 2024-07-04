@@ -1,15 +1,26 @@
 "use client"
 
+import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "~/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
- 
+import { type FormEvent } from "react";
+import { useRouter } from "next/router";
 
 export default function HomePage() {
+  const [hostname, setHostname] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
+
+  useEffect(() => {
+        console.log(window.location.hostname) 
+        console.log(window.location.href) // Logs `http://localhost:3000/blog/incididunt-ut-lobare-et-dolore`
+        setHostname(window.location.href);
+    }, [])
+
   const formSchema = z.object({
     link: z.string()
   });
@@ -21,16 +32,28 @@ export default function HomePage() {
     },
   })
  
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget)
+
+    console.log(formData);
+    
+    await fetch('/api/create_short_url', {
+      method: 'POST',
+      body: formData,
+    }).then(async (res) => {
+      await res.json().then((data: {body: {id: string}}) => {
+        setShortUrl(data.body.id);
+      });
+    });
   }
 
   return (
-    <main className="flex flex-col">
-      <h1 className="p-4 text-center font-semibold text-xl">URL Shortener</h1>
+    <main className="flex flex-col items-center">
+      <h1 className="p-4 text-center font-semibold text-xl w-full">URL Shortener</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-center">
+        <form onSubmit={onSubmit} className="flex flex-col items-center w-full">
           <FormField 
             control={form.control}
             name="link"
@@ -47,6 +70,9 @@ export default function HomePage() {
           <Button type="submit" className="mx-4 w-36">Shorten</Button>
         </form>
       </Form>
+      <div className="py-8">
+        {shortUrl && <a href={hostname + shortUrl} >{hostname}{shortUrl}</a>}
+      </div>
     </main>
   );
 }
