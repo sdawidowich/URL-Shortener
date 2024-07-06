@@ -5,24 +5,20 @@ import { Inter as FontSans } from "next/font/google"
 import { cn } from "~/lib/utils"
  
 const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
+    subsets: ["latin"],
+    variable: "--font-sans",
 })
 
 export const metadata = {
-  title: "URL Shortener",
-  description: "Shorten urls with this one simple trick!",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+    title: "URL Shortener",
+    description: "Shorten urls with this one simple trick!",
+    icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en" className={`${fontSans.variable}`}>
-      <body>{children}</body>
-    </html>
-  );
+export default function RootLayout({children, }: { children: React.ReactNode; }) {
+    return (
+        <html lang="en" className={`${fontSans.variable}`}>
+        <body>{children}</body>
+        </html>
+    );
 }
