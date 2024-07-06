@@ -6,12 +6,7 @@ export default async function Redirect(ctx: { params: { id: string }}) {
     const url = await db.query.urls.findFirst({ where: (urls, { eq }) => eq(urls.id, ctx.params.id)});
     if (url != null) {
         await db.insert(visits).values({ url_id: url.id, accessed: null });
-        try {
-            redirect(url.link);
-        }
-        catch (e) {
-            return notFound();
-        }
+        redirect(url.link);
     }
     else {
         return notFound();

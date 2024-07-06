@@ -12,15 +12,27 @@ function generateLinkId() {
 }
  
 export async function POST(req: NextRequest) {
-    let url_id: string = generateLinkId();
+    const data: FormData = await req.formData();
+    
+    const link: string | undefined = data.get("link")?.toString();
+    if (link) {
+        const maxAttempts = 10;
+        let attempts = 0;
 
-    while(await db.query.urls.findFirst({ where: (urls, { eq }) => eq(urls.id, url_id)}) != null) {
-        url_id = generateLinkId();
+        while (attempts < maxAttempts) {
+            try {
+                const url_id: string = generateLinkId();
+
+                await db.insert(urls).values({ id: url_id, link: link, created_at: new Date() });
+
+                return Response.json({success: true, body: {id: url_id}});
+            }
+            catch (e) {
+                console.log(e);
+                attempts++;
+            }
+        }
     }
-
-    await req.formData().then(async (data: FormData) => {
-        await db.insert(urls).values({ id: url_id, link: data.get("link"), created_at: null });
-    });
-
-    return Response.json({body: {id: url_id}});
+    
+    return Response.json({success: false, error: 500});
 }
