@@ -27,12 +27,29 @@ export default function HomePage() {
         defaultValues: {
             link: "",
         },
-    })
+    });
+
+    function isValidUrl(url: string) {
+        try {
+            new URL(url);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
 
     async function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const formData = new FormData(event.currentTarget)
+
+        const formData = new FormData(event.currentTarget);
+        const link: string | undefined = formData.get("link")?.toString();
+
+        if (!link || !isValidUrl(link)) {
+            console.log("Invalid url");
+            return;
+        }
 
         await fetch('/api/create_short_url', {
             method: 'POST',
@@ -40,12 +57,12 @@ export default function HomePage() {
         })
         .then(async (res) => {
             await res.json().then((data: {success: boolean, error: number, body: {id: string}}) => {
-            if (data.success) {
-                setShortUrl(data.body.id);
-            }
-            else {
-                console.log(`Something went wrong! Error code: ${data.error}`)
-            }
+                if (data.success) {
+                    setShortUrl(data.body.id);
+                }
+                else {
+                    console.log(`Something went wrong! Error code: ${data.error}`)
+                }
             });
         });
     }
@@ -54,25 +71,25 @@ export default function HomePage() {
         <main className="flex flex-col items-center">
             <h1 className="p-4 text-center font-semibold text-xl w-full">URL Shortener</h1>
             <Form {...form}>
-            <form onSubmit={onSubmit} className="flex flex-col items-center w-full">
-                <FormField 
-                control={form.control}
-                name="link"
-                render={
-                    ({field}) => (
-                    <FormItem className="flex flex-col p-8 w-full items-center">
-                        <FormControl>
-                        <Input placeholder="Long URL" {...field} className="flex-1 min-w-36 max-w-4xl" />
-                        </FormControl>
-                    </FormItem>
-                    )
-                }
-                />
-                <Button type="submit" className="mx-4 w-36">Shorten</Button>
-            </form>
+                <form onSubmit={onSubmit} className="flex flex-col items-center w-full">
+                    <FormField 
+                    control={form.control}
+                    name="link"
+                    render={
+                        ({field}) => (
+                        <FormItem className="flex flex-col p-8 w-full items-center">
+                            <FormControl>
+                            <Input placeholder="Long URL" {...field} className="flex-1 min-w-36 max-w-4xl" />
+                            </FormControl>
+                        </FormItem>
+                        )
+                    }
+                    />
+                    <Button type="submit" className="mx-4 w-36">Shorten</Button>
+                </form>
             </Form>
             <div className="py-8">
-            {shortUrl && <a href={hostname + shortUrl} >{hostname}{shortUrl}</a>}
+                {shortUrl && <a href={hostname + shortUrl} >{hostname}{shortUrl}</a>}
             </div>
         </main>
     );

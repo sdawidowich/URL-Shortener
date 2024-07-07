@@ -12,13 +12,13 @@ const fontSans = FontSans({
 export const metadata = {
     title: "URL Shortener",
     description: "Shorten urls with this one simple trick!",
-    icons: [{ rel: "icon", url: "/favicon.ico" }],
+    icons: [{ rel: "icon", url: "/favicon-128.png" }],
 };
 
 export default function RootLayout({children, }: { children: React.ReactNode; }) {
     return (
         <html lang="en" className={`${fontSans.variable}`}>
-        <body>{children}</body>
+            <body>{children}</body>
         </html>
     );
 }
