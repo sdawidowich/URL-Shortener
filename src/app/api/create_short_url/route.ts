@@ -1,6 +1,6 @@
 import { type NextRequest } from 'next/server';
 import { db } from '~/server/db';
-import { urls } from '~/server/db/schema';
+import { Urls } from '~/server/db/schema';
 
 function generateLinkId() {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
             try {
                 const url_id: string = generateLinkId();
 
-                await db.insert(urls).values({ id: url_id, link: link, created_at: new Date() });
+                await db.insert(Urls).values({ id: url_id, url: link, created_by: "1", created_on: new Date() });
 
                 return Response.json({success: true, body: {id: url_id}});
             }

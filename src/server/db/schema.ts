@@ -10,18 +10,27 @@ import { pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 
-export const urls = pgTable("url", {
+
+export const Users = pgTable("User", {
     id: varchar("id", { length: 8 }).primaryKey(),
-    link: text("link").notNull(),
-    created_at: timestamp("created_at", { withTimezone: false }),
+    created_on: timestamp("created_on", { withTimezone: false }).notNull(),
 });
 
-export const visits = pgTable("visit", {
+export const Urls = pgTable("Url", {
+    id: varchar("id", { length: 8 }).primaryKey(),
+    url: text("url").notNull(),
+    created_by: varchar("created_by", { length: 32 })
+        .references(() => Users.id)
+        .notNull(),
+    created_on: timestamp("created_on", { withTimezone: false }).notNull(),
+});
+
+export const Visits = pgTable("Visit", {
     id: serial("id").primaryKey(),
     url_id: text("url_id")
-        .references(() => urls.id)
+        .references(() => Urls.id)
         .notNull(),
-    accessed: timestamp("accessed", { withTimezone: false }),
+    accessed_on: timestamp("accessed_on", { withTimezone: false }),
     browser: text("browser"),
     location: text("location"),
 });
