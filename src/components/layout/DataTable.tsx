@@ -12,7 +12,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ArrowUp, ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 import { useState } from "react"
 
 import { Button } from "~/components/ui/button"
@@ -35,7 +35,11 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import { Input } from "../ui/input"
-import { Url, UrlView } from "~/server/db/schema"
+import { UrlView } from "~/server/db/schema"
+
+function GetSortIcon(column) {
+    
+}
 
 const columns: ColumnDef<UrlView>[] = [
     {
@@ -62,10 +66,20 @@ const columns: ColumnDef<UrlView>[] = [
     },
     {
         accessorKey: "id",
-        header: "ID",
-        cell: ({ row }) => (
-            <div>{row.getValue("id")}</div>
-        ),
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    ID
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+
+                    <ArrowUp className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }) => <div>{row.getValue("id")}</div>,
     },
     {
         accessorKey: "url",

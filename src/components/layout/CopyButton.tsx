@@ -30,7 +30,7 @@ export function CopyButton({label, copyText}: {label: string, copyText: string})
       <Button
         onClick={handleCopy}
         variant="outline"
-        className="w-40"
+        className="w-36"
         aria-label={isCopied ? "Copied to clipboard" : "Copy to clipboard"}
       >
         {isCopied ? (

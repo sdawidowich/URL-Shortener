@@ -47,8 +47,9 @@ export function Shorten_Form() {
             });
         });
     }
+
     return (
-        <div className="flex flex-col items-center justify-center w-full max-w-4xl py-4">
+        <div className="flex-1 flex flex-col items-center justify-center w-full max-w-4xl py-4">
             <Form {...form}>
                 <form onSubmit={onSubmit} className="flex flex-row items-center w-full justify-center">
                     <FormField 
@@ -64,7 +65,7 @@ export function Shorten_Form() {
                         )
                     }
                     />
-                    <Button type="submit" className="w-36">Shorten</Button>
+                    <Button type="submit" className="w-24">Shorten</Button>
                 </form>
             </Form>
             <URL_Card shortUrlId={shortUrlId} longUrl={longUrl} />

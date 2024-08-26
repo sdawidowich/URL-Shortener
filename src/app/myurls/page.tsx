@@ -6,8 +6,8 @@ export default async function MyURLsPage() {
     const urlViewList = (await db.select().from(UrlsView)) as UrlView[];
 
     return (
-      <main className="flex flex-col items-center px-4">
-        <DataTable data={urlViewList} />
-      </main>
+        <div className="flex flex-col items-center justify-center px-4 h-full">
+            <DataTable data={urlViewList} />
+        </div>
     );
 }
