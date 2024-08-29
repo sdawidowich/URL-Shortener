@@ -7,12 +7,12 @@ import { Badge } from "../ui/badge";
 import { ExternalLink } from "./ExternalLink";
 
 export function URL_Card({ shortUrlId, longUrl }: { shortUrlId: string | null; longUrl: string | null}) {
-  const [hostname, setHostname] = useState("");
+  const [origin, setOrigin] = useState("");
 
-  const shortUrl = hostname + "to/" + shortUrlId;
+  const shortUrl = `${origin}/to/${shortUrlId}`;
 
   useEffect(() => {
-    setHostname(window.location.href);
+    setOrigin(window.location.origin);
   }, []);
 
   return (

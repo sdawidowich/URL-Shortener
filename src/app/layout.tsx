@@ -2,7 +2,6 @@ import "~/styles/globals.css";
 
 import { Inter as FontSans } from "next/font/google"
 
-import { cn } from "~/lib/utils"
 import Image from "next/image";
 import Link from "next/link";
 import { NavLink } from "~/components/layout/NavLink";

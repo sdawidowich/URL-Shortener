@@ -1,4 +1,4 @@
-import { ChildElement } from "~/types";
+import { type ChildElement } from "~/types";
 
 export function ExternalLink({href, children}: {href: string, children?: ChildElement}) {
     return (

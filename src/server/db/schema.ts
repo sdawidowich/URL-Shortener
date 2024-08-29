@@ -59,5 +59,5 @@ export type UrlView = {
     url: string,
     created_by: string,
     created_on: Date,
-    visits: Number
+    visits: number
 };

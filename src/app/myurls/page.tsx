@@ -1,6 +1,8 @@
 import DataTable from "~/components/layout/DataTable";
 import { db } from "~/server/db";
-import { Url, Urls, UrlsView, UrlView } from "~/server/db/schema";
+import { UrlsView, type UrlView } from "~/server/db/schema";
+
+export const dynamic = "force-dynamic";
 
 export default async function MyURLsPage() {
     const urlViewList = (await db.select().from(UrlsView)) as UrlView[];
