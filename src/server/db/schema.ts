@@ -2,20 +2,24 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { count, eq } from "drizzle-orm";
-import { pgTable, pgView, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
-
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-
+import { numeric, pgTable, pgView, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 // Tables
 export const Users = pgTable("User", {
-    id: varchar("id", { length: 8 }).primaryKey(),
+    id: text("id").primaryKey(),
+    github_id: numeric("github_id").unique(),
+    username: text("username").notNull(),
     created_on: timestamp("created_on", { withTimezone: false }).notNull(),
+});
+
+export const Sessions = pgTable("Session", {
+	id: text("id").primaryKey(),
+	userId: text("user_id")
+		.notNull()
+		.references(() => Users.id),
+	expiresAt: timestamp("expires_at", {
+		withTimezone: true
+	}).notNull()
 });
 
 export const Urls = pgTable("Url", {
@@ -52,6 +56,7 @@ export const UrlsView = pgView("Url_View")
 
 // Object types
 export type User = typeof Users.$inferSelect;
+export type Session = typeof Sessions.$inferSelect;
 export type Url = typeof Urls.$inferSelect;
 export type Visit = typeof Visits.$inferSelect;
 export type UrlView = {
