@@ -1,6 +1,8 @@
 import { eq } from "drizzle-orm";
 import { db } from ".";
-import { type Url, Urls, type User, Users, Visits } from "./schema";
+import { type Url, Urls, UrlsView, type UrlView, type User, Users, Visits } from "./schema";
+import { ValidateRequest } from "~/lib/auth/auth";
+import { redirect } from "next/navigation";
 
 // Urls
 export async function GetUrl(id: string): Promise<Url> {
@@ -18,6 +20,17 @@ export async function InsertUrl(id: string, link: string, user_id: string) {
 
 export async function DeleteUrl(id: string) {
     await db.delete(Urls).where(eq(Urls.id, id));
+}
+
+// UrlView
+export async function GetUrlViewList(): Promise<UrlView[]> {
+    const { user } = await ValidateRequest();
+
+    if (!user) {
+      return redirect("/login");
+    }
+
+    return await db.select().from(UrlsView).where(eq(UrlsView.created_by, user.id)).orderBy(UrlsView.id) as UrlView[];
 }
 
 // Users

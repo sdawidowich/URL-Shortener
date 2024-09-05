@@ -5,9 +5,11 @@ import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function ActionsDropdown({url_id}: {url_id: string}) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const router = useRouter();
 
     async function DeleteAction() {
         await fetch(`/api/url?id=${url_id}`, {
@@ -20,8 +22,8 @@ export function ActionsDropdown({url_id}: {url_id: string}) {
                 }
             });
         });
-        console.log("action");
         setOpenDeleteDialog(false);
+        router.refresh();
     }
 
     return (

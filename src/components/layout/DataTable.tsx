@@ -39,7 +39,7 @@ import { Badge } from "../ui/badge"
 import { ActionsDropdown } from "./ActionsDropdown"
 
 export default function DataTable({ data }: { data: UrlView[] }) {
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [sorting, setSorting] = useState<SortingState>([{id: "created_on", desc: true}]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
