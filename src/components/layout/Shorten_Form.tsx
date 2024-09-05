@@ -9,8 +9,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState, type FormEvent } from "react";
 import { URL_Card } from "~/components/layout/URL_Card";
+import { type User } from "lucia";
 
-export function Shorten_Form() {
+export function Shorten_Form({user}: {user: User}) {
     const [shortUrlId, setShortUrlId] = useState<string | null>(null);
     const [longUrl, setLongUrl] = useState<string | null>(null);
 
@@ -21,7 +22,7 @@ export function Shorten_Form() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            link: "",
+            link: ""
         },
     });
 
@@ -29,6 +30,8 @@ export function Shorten_Form() {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
+
+        formData.set("user_id", user.id);
 
         await fetch('/api/create_short_url', {
             method: 'POST',
@@ -49,26 +52,29 @@ export function Shorten_Form() {
     }
 
     return (
-        <div className="flex-1 flex flex-col items-center justify-center w-full max-w-4xl py-4">
-            <Form {...form}>
-                <form onSubmit={onSubmit} className="flex flex-row items-center w-full justify-center">
-                    <FormField 
-                    control={form.control}
-                    name="link"
-                    render={
-                        ({field}) => (
-                        <FormItem className="flex-1 min-w-36 w-full pr-2">
-                            <FormControl>
-                            <Input placeholder="Long URL" {...field} />
-                            </FormControl>
-                        </FormItem>
-                        )
-                    }
-                    />
-                    <Button type="submit" className="w-24">Shorten</Button>
-                </form>
-            </Form>
-            <URL_Card shortUrlId={shortUrlId} longUrl={longUrl} />
-        </div>
-    )
+      <div className="flex w-full max-w-4xl flex-1 flex-col items-center justify-center py-4">
+        <Form {...form}>
+          <form
+            onSubmit={onSubmit}
+            className="flex w-full flex-row items-center justify-center"
+          >
+            <FormField
+              control={form.control}
+              name="link"
+              render={({ field }) => (
+                <FormItem className="w-full min-w-36 flex-1 pr-2">
+                  <FormControl>
+                    <Input placeholder="Long URL" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-24">
+              Shorten
+            </Button>
+          </form>
+        </Form>
+        <URL_Card shortUrlId={shortUrlId} longUrl={longUrl} />
+      </div>
+    );
 }

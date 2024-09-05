@@ -25,7 +25,7 @@ export const Sessions = pgTable("Session", {
 export const Urls = pgTable("Url", {
     id: varchar("id", { length: 8 }).primaryKey(),
     url: text("url").notNull(),
-    created_by: varchar("created_by", { length: 32 })
+    created_by: text("created_by")
         .references(() => Users.id)
         .notNull(),
     created_on: timestamp("created_on", { withTimezone: false }).notNull(),

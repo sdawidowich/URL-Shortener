@@ -15,7 +15,9 @@ export async function POST(req: NextRequest) {
     const data: FormData = await req.formData();
     
     const link: string | undefined = data.get("link")?.toString();
-    if (link) {
+    const user_id: string | undefined = data.get("user_id")?.toString();
+
+    if (link && user_id) {
         const maxAttempts = 10;
         let attempts = 0;
 
@@ -23,7 +25,7 @@ export async function POST(req: NextRequest) {
             try {
                 const url_id: string = generateLinkId();
 
-                await db.insert(Urls).values({ id: url_id, url: link, created_by: "1", created_on: new Date() });
+                await db.insert(Urls).values({ id: url_id, url: link, created_by: user_id, created_on: new Date() });
 
                 return Response.json({success: true, body: {id: url_id}});
             }
