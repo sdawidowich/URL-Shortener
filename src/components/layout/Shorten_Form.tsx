@@ -33,7 +33,7 @@ export function Shorten_Form({user}: {user: User}) {
 
         formData.set("user_id", user.id);
 
-        await fetch('/api/create_short_url', {
+        await fetch('/api/url', {
             method: 'POST',
             body: formData,
         })

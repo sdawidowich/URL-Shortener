@@ -12,7 +12,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ChevronDown, Edit, MoreHorizontal, Trash } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Button } from "~/components/ui/button"
@@ -21,9 +21,6 @@ import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
 import {
@@ -39,6 +36,7 @@ import { type UrlView } from "~/server/db/schema"
 import { SortButton } from "./SortButton"
 import { ExternalLink } from "./ExternalLink"
 import { Badge } from "../ui/badge"
+import { ActionsDropdown } from "./ActionsDropdown"
 
 export default function DataTable({ data }: { data: UrlView[] }) {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -138,23 +136,7 @@ export default function DataTable({ data }: { data: UrlView[] }) {
                 const url = row.original
 
                 return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(url.id)}>
-                                Copy url ID
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem><Edit width={16} height={16} className="mr-1" /> Edit url</DropdownMenuItem>
-                            <DropdownMenuItem><Trash width={16} height={16} className="mr-1" /> Delete url</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <ActionsDropdown url_id={url.id} />
                 )
             },
         },

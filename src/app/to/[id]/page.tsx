@@ -1,12 +1,11 @@
 import { notFound, redirect } from 'next/navigation'
-import { db } from '~/server/db';
-import { type Url, Visits } from '~/server/db/schema';
+import { GetUrl, InsertVisit } from '~/server/db/utils';
 
 export default async function Redirect(ctx: { params: { id: string }}) {
-    const url = await db.query.Urls.findFirst({ where: (Urls, { eq }) => eq(Urls.id, ctx.params.id)}) as Url;
+    const url = await GetUrl(ctx.params.id);
 
     if (url != null) {
-        await db.insert(Visits).values({ url_id: url.id, accessed_on: new Date() });
+        await InsertVisit(url.id);
         redirect(url.url);
     }
     else {
