@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
                 const url_id: string = generateLinkId();
 
                 await InsertUrl(url_id, link, user_id);
-                revalidatePath('/myurls', 'page');
+                revalidatePath('/myurls');
 
                 return Response.json({success: true, body: {id: url_id}});
             }

@@ -37,6 +37,7 @@ import { SortButton } from "./SortButton"
 import { ExternalLink } from "./ExternalLink"
 import { Badge } from "../ui/badge"
 import { ActionsDropdown } from "./ActionsDropdown"
+import { Skeleton } from "../ui/skeleton"
 
 export default function DataTable({ data }: { data: UrlView[] }) {
     const [sorting, setSorting] = useState<SortingState>([{id: "created_on", desc: true}]);
@@ -85,17 +86,22 @@ export default function DataTable({ data }: { data: UrlView[] }) {
                 const longUrl = `${String(row.getValue("url"))}`;
                 
                 return (
-                  <div>
-                    <div className="mb-2">
-                      <ExternalLink href={shortUrl}>{shortUrl}</ExternalLink>
+                    <div>
+                        <div className="mb-1">
+                            {
+                                !origin ? 
+                                    <Skeleton className="h-4 w-[250px]" />
+                                :
+                                    <ExternalLink href={shortUrl}>{shortUrl}</ExternalLink>
+                            }
+                        </div>
+                        <div className="text-xs text-foreground/60">
+                            <Badge variant="outline" className="text-xxs mr-2">
+                                Long URL
+                            </Badge>
+                            <ExternalLink href={longUrl}>{longUrl}</ExternalLink>
+                        </div>
                     </div>
-                    <div className="text-xs text-foreground/60">
-                      <Badge variant="outline" className="text-xxs mr-2">
-                        Long URL
-                      </Badge>
-                      <ExternalLink href={longUrl}>{longUrl}</ExternalLink>
-                    </div>
-                  </div>
                 );
             },
         },

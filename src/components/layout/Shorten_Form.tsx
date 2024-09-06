@@ -10,6 +10,7 @@ import { z } from "zod";
 import { useState, type FormEvent } from "react";
 import { URL_Card } from "~/components/layout/URL_Card";
 import { type User } from "lucia";
+import { Separator } from "../ui/separator";
 
 export function Shorten_Form({user}: {user: User}) {
     const [shortUrlId, setShortUrlId] = useState<string | null>(null);
@@ -52,7 +53,11 @@ export function Shorten_Form({user}: {user: User}) {
     }
 
     return (
-      <div className="flex w-full max-w-4xl flex-1 flex-col items-center justify-center py-4">
+      <div className="flex w-full max-w-4xl flex-1 flex-col items-center justify-center py-4 gap-6">
+        <div className="w-full">
+            <h1 className="w-full text-2xl font-semibold py-2">Shorten a URL</h1>
+            <Separator />
+        </div>
         <Form {...form}>
           <form
             onSubmit={onSubmit}
