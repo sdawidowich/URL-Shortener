@@ -7,7 +7,7 @@ import { ConfirmDialog } from "./ConfirmDialog";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function ActionsDropdown({url_id}: {url_id: string}) {
+export function ActionsDropdown({url_id, url_key}: {url_id: number, url_key: string}) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const router = useRouter();
 
@@ -37,8 +37,8 @@ export function ActionsDropdown({url_id}: {url_id: string}) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => navigator.clipboard.writeText(url_id)}>
-                        Copy url ID
+                    <DropdownMenuItem onClick={() => navigator.clipboard.writeText(url_key)}>
+                        Copy URL Key
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem><Edit width={16} height={16} className="mr-1" /> Edit url</DropdownMenuItem>

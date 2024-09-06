@@ -1,5 +1,5 @@
 {
-  "id": "e3d670a8-716e-45a5-8c7a-98158e37aa5a",
+  "id": "916aae6b-8f37-456f-800c-5de6fa7cec1d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -52,8 +52,14 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(8)",
+          "type": "serial",
           "primaryKey": true,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "url": {
@@ -64,7 +70,7 @@
         },
         "created_by": {
           "name": "created_by",
-          "type": "varchar(32)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -92,7 +98,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "Url_key_unique": {
+          "name": "Url_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "key"
+          ]
+        }
+      }
     },
     "public.User": {
       "name": "User",
@@ -106,7 +120,7 @@
         },
         "github_id": {
           "name": "github_id",
-          "type": "numeric",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -114,7 +128,7 @@
           "name": "username",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_on": {
           "name": "created_on",
@@ -148,7 +162,7 @@
         },
         "url_id": {
           "name": "url_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },

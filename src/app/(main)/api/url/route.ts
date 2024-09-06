@@ -3,7 +3,7 @@ import { type NextRequest } from 'next/server';
 import { ValidateRequest } from '~/lib/auth/auth';
 import { generateLinkId } from '~/lib/utils';
 import { type Url } from '~/server/db/schema';
-import { DeleteUrl, DeleteUrlVisits, GetUrl, InsertUrl } from '~/server/db/utils';
+import { DeleteUrl, DeleteUrlVisits, GetUrlById, InsertUrl } from '~/server/db/utils';
  
 export async function POST(req: NextRequest) {
     const data: FormData = await req.formData();
@@ -40,12 +40,12 @@ export async function DELETE(req: NextRequest) {
         return Response.redirect("/login");
     }
     
-    const url_id: string | undefined = req.nextUrl.searchParams.get("id")?.toString();
+    const url_id: number = parseInt(req.nextUrl.searchParams.get("id")?.toString() ?? "");
     if (!url_id) {
         return Response.json({ success: false, error: 500 });
     }
 
-    const url: Url | undefined = await GetUrl(url_id);
+    const url: Url | undefined = await GetUrlById(url_id);
 
     if (url && user.id === url.created_by) {
         try {

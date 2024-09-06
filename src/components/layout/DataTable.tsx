@@ -53,6 +53,7 @@ export default function DataTable({ data }: { data: UrlView[] }) {
     const columns: ColumnDef<UrlView>[] = [
         {
             id: "select",
+            size: 50,
             header: ({ table }) => (
                 <Checkbox
                     checked={
@@ -75,14 +76,16 @@ export default function DataTable({ data }: { data: UrlView[] }) {
         },
         {
             accessorKey: "url",
-            size: 200,
+            enableResizing: false,
+            size: 1000,
+            minSize: 275,
             header: ({ column }) => {
                 return (
                     <SortButton column={column}>URL</SortButton>
                 )
             },
             cell: ({ row }) => {
-                const shortUrl = `${origin}/to/${String(row.getValue("id"))}`;
+                const shortUrl = `${origin}/to/${String(row.getValue("key"))}`;
                 const longUrl = `${String(row.getValue("url"))}`;
                 
                 return (
@@ -106,43 +109,45 @@ export default function DataTable({ data }: { data: UrlView[] }) {
             },
         },
         {
-            accessorKey: "id",
-            size: 200,
+            accessorKey: "key",
+            size: 100,
             header: ({ column }) => {
                 return (
-                    <SortButton column={column}>ID</SortButton>
+                    <SortButton column={column}>Key</SortButton>
                 )
             },
-            cell: ({ row }) => <div>{row.getValue("id")}</div>
+            cell: ({ row }) => <div className="text-center">{row.getValue("key")}</div>
         },
         {
             accessorKey: "created_on",
             size: 200,
+            minSize: 175,
             header: ({ column }) => {
                 return (
                     <SortButton column={column}>Created On</SortButton>
                 )
             },
-            cell: ({ row }) => <div>{(new Date(row.getValue("created_on"))).toLocaleString()}</div>,
+            cell: ({ row }) => <div className="text-center">{(new Date(row.getValue("created_on"))).toLocaleString()}</div>,
         },
         {
             accessorKey: "visits",
-            size: 200,
+            size: 100,
             header: ({ column }) => {
                 return (
                     <SortButton column={column}>Visits</SortButton>
                 )
             },
-            cell: ({ row }) => <div>{row.getValue("visits")}</div>,
+            cell: ({ row }) => <div className="text-center">{row.getValue("visits")}</div>,
         },
         {
             id: "actions",
+            size: 50,
             enableHiding: false,
             cell: ({ row }) => {
                 const url = row.original
 
                 return (
-                    <ActionsDropdown url_id={url.id} />
+                    <ActionsDropdown url_id={url.id} url_key={url.key} />
                 )
             },
         },
@@ -160,10 +165,10 @@ export default function DataTable({ data }: { data: UrlView[] }) {
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
         state: {
-        sorting,
-        columnFilters,
-        columnVisibility,
-        rowSelection,
+            sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
         },
     });
 
@@ -213,7 +218,7 @@ export default function DataTable({ data }: { data: UrlView[] }) {
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                 return (
-                                    <TableHead key={header.id}>
+                                    <TableHead key={header.id} style={{ width: `${header.getSize()}px`, minWidth: `${header.column.columnDef.minSize}px` }}>
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(

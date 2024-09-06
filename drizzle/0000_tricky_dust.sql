@@ -5,23 +5,25 @@ CREATE TABLE IF NOT EXISTS "Session" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "Url" (
-	"id" varchar(8) PRIMARY KEY NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
+	"key" text NOT NULL,
 	"url" text NOT NULL,
-	"created_by" varchar(32) NOT NULL,
-	"created_on" timestamp NOT NULL
+	"created_by" text NOT NULL,
+	"created_on" timestamp NOT NULL,
+	CONSTRAINT "Url_key_unique" UNIQUE("key")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "User" (
 	"id" text PRIMARY KEY NOT NULL,
-	"github_id" numeric,
-	"username" text,
+	"github_id" integer,
+	"username" text NOT NULL,
 	"created_on" timestamp NOT NULL,
 	CONSTRAINT "User_github_id_unique" UNIQUE("github_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "Visit" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"url_id" text NOT NULL,
+	"url_id" integer NOT NULL,
 	"accessed_on" timestamp,
 	"browser" text,
 	"location" text

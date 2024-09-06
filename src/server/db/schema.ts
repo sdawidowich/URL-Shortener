@@ -2,12 +2,12 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { count, eq } from "drizzle-orm";
-import { numeric, pgTable, pgView, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, pgView, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 // Tables
 export const Users = pgTable("User", {
     id: text("id").primaryKey(),
-    github_id: numeric("github_id").unique(),
+    github_id: integer("github_id").unique(),
     username: text("username").notNull(),
     created_on: timestamp("created_on", { withTimezone: false }).notNull(),
 });
@@ -23,7 +23,8 @@ export const Sessions = pgTable("Session", {
 });
 
 export const Urls = pgTable("Url", {
-    id: varchar("id", { length: 8 }).primaryKey(),
+    id: serial("id").primaryKey(),
+    key: text("key").unique().notNull(),
     url: text("url").notNull(),
     created_by: text("created_by")
         .references(() => Users.id)
@@ -33,7 +34,7 @@ export const Urls = pgTable("Url", {
 
 export const Visits = pgTable("Visit", {
     id: serial("id").primaryKey(),
-    url_id: text("url_id")
+    url_id: integer("url_id")
         .references(() => Urls.id)
         .notNull(),
     accessed_on: timestamp("accessed_on", { withTimezone: false }),
@@ -45,6 +46,7 @@ export const Visits = pgTable("Visit", {
 export const UrlsView = pgView("Url_View")
     .as((qb) => qb.select({
         id: Urls.id,
+        key: Urls.key,
         url: Urls.url,
         created_by: Urls.created_by,
         created_on: Urls.created_on,
@@ -60,7 +62,8 @@ export type Session = typeof Sessions.$inferSelect;
 export type Url = typeof Urls.$inferSelect;
 export type Visit = typeof Visits.$inferSelect;
 export type UrlView = {
-    id: string,
+    id: number,
+    key: string,
     url: string,
     created_by: string,
     created_on: Date,

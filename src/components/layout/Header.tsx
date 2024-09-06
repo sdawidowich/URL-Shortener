@@ -19,7 +19,7 @@ export function Header() {
                     </div>
                 </Link>
             </div>
-            <nav className="flex flex-row items-center">
+            <nav className="flex flex-row items-center gap-1">
                 <NavLink href="/">Home</NavLink>
                 <NavLink href="/myurls">My URLs</NavLink>
             </nav>

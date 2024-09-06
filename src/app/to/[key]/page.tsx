@@ -1,8 +1,8 @@
 import { notFound, redirect } from 'next/navigation'
-import { GetUrl, InsertVisit } from '~/server/db/utils';
+import {  GetUrlByKey, InsertVisit } from '~/server/db/utils';
 
-export default async function Redirect(ctx: { params: { id: string }}) {
-    const url = await GetUrl(ctx.params.id);
+export default async function Redirect(ctx: { params: { key: string }}) {
+    const url = await GetUrlByKey(ctx.params.key);
 
     if (url != null) {
         await InsertVisit(url.id);
