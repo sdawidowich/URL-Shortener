@@ -19,11 +19,13 @@ export function Header() {
                     </div>
                 </Link>
             </div>
-            <nav className="flex flex-row items-center gap-1">
-                <NavLink href="/">Home</NavLink>
-                <NavLink href="/myurls">My URLs</NavLink>
-            </nav>
-            <Profile />
+            <div className="flex flex-row justify-between gap-2">
+                <nav className="flex-1 flex flex-row items-center gap-1">
+                    <NavLink href="/">Home</NavLink>
+                    <NavLink href="/myurls">My URLs</NavLink>
+                </nav>
+                <Profile />
+            </div>
         </header>
     )
 }

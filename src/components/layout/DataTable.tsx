@@ -13,7 +13,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useContext, useState } from "react"
 
 import { Button } from "~/components/ui/button"
 import { Checkbox } from "~/components/ui/checkbox"
@@ -38,17 +38,15 @@ import { ExternalLink } from "./ExternalLink"
 import { Badge } from "../ui/badge"
 import { ActionsDropdown } from "./ActionsDropdown"
 import { Skeleton } from "../ui/skeleton"
+import { HostnameContext } from "../auth/AuthProvider"
 
 export default function DataTable({ data }: { data: UrlView[] }) {
     const [sorting, setSorting] = useState<SortingState>([{id: "created_on", desc: true}]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
-    const [origin, setOrigin] = useState("");
     
-    useEffect(() => {
-        setOrigin(window.location.origin);
-    }, []);
+    const hostname = useContext(HostnameContext);
 
     const columns: ColumnDef<UrlView>[] = [
         {
@@ -85,14 +83,14 @@ export default function DataTable({ data }: { data: UrlView[] }) {
                 )
             },
             cell: ({ row }) => {
-                const shortUrl = `${origin}/to/${String(row.getValue("key"))}`;
+                const shortUrl = `${hostname}/to/${String(row.getValue("key"))}`;
                 const longUrl = `${String(row.getValue("url"))}`;
                 
                 return (
                     <div>
                         <div className="mb-1">
                             {
-                                !origin ? 
+                                !hostname ? 
                                     <Skeleton className="h-4 w-[250px]" />
                                 :
                                     <ExternalLink href={shortUrl}>{shortUrl}</ExternalLink>
@@ -144,10 +142,10 @@ export default function DataTable({ data }: { data: UrlView[] }) {
             size: 50,
             enableHiding: false,
             cell: ({ row }) => {
-                const url = row.original
+                const url: UrlView = row.original
 
                 return (
-                    <ActionsDropdown url_id={url.id} url_key={url.key} />
+                    <ActionsDropdown url={url} />
                 )
             },
         },

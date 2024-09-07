@@ -10,7 +10,7 @@ export function NavLink({ href, className, children }: { href: string, className
   return (
     <Link
       href={href}
-      className={cn(className, "text-nowrap rounded-sm bg-background px-3 py-1 align-middle hover:bg-secondary/95 hover:text-foreground/80 font-semibold",
+      className={cn(className, "text-nowrap rounded-sm px-3 py-1 align-middle hover:bg-secondary/95 hover:text-foreground/80 font-semibold",
         path === href
           ? "text-foreground"
           : "text-foreground/60",

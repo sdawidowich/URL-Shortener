@@ -22,6 +22,16 @@ export async function InsertUrl(key: string, link: string, user_id: string) {
     }
 }
 
+export async function UpdateUrl(id: number, key: string) {
+    try {
+        await db.update(Urls).set({key: key}).where(eq(Urls.id, id));
+        return { status: 200 };
+    }
+    catch (e) {
+        return { status: 409 };
+    }
+}
+
 export async function DeleteUrl(id: number) {
     await db.delete(Urls).where(eq(Urls.id, id));
 }
