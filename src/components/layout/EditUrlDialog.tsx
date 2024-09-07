@@ -32,7 +32,7 @@ export function EditUrlDialog({open, setOpen, url, action, children}:
                 method: 'GET'
             });
             
-            return res.status !== 200;
+            return res.status === 404;
 
         }, {"message": "This URL key is already taken"})
     });

@@ -3,6 +3,7 @@ import { db } from ".";
 import { type Url, Urls, UrlsView, type UrlView, type User, Users, Visits } from "./schema";
 import { ValidateRequest } from "~/lib/auth/auth";
 import { redirect } from "next/navigation";
+import { type UserAgent } from "~/types";
 
 // Urls
 export async function GetUrlById(id: number): Promise<Url> {
@@ -64,8 +65,8 @@ export async function GetUserByGitHubId(github_id: number): Promise<User> {
 }
 
 // Visits
-export async function InsertVisit(url_id: number) {
-    await db.insert(Visits).values({ url_id: url_id, accessed_on: new Date() });
+export async function InsertVisit(url_id: number, user_agent: UserAgent) {
+    await db.insert(Visits).values({ url_id: url_id, accessed_on: new Date(), browser: user_agent.browser, os: user_agent.os, device_type: user_agent.device_type, is_bot: user_agent.isBot });
 }
 
 export async function DeleteUrlVisits(url_id: number) {

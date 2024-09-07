@@ -2,7 +2,7 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { count, eq } from "drizzle-orm";
-import { integer, pgTable, pgView, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, pgView, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 // Tables
 export const Users = pgTable("User", {
@@ -39,7 +39,9 @@ export const Visits = pgTable("Visit", {
         .notNull(),
     accessed_on: timestamp("accessed_on", { withTimezone: false }),
     browser: text("browser"),
-    location: text("location"),
+    is_bot: boolean("is_bot"),
+    device_type: text("device_type"),
+    os: text("os")
 });
 
 // Views
