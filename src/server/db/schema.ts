@@ -1,7 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { count, eq } from "drizzle-orm";
+import { count, eq, sql } from "drizzle-orm";
 import { boolean, integer, pgTable, pgView, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 // Tables
@@ -37,7 +37,7 @@ export const Visits = pgTable("Visit", {
     url_id: integer("url_id")
         .references(() => Urls.id)
         .notNull(),
-    accessed_on: timestamp("accessed_on", { withTimezone: false }),
+    accessed_on: timestamp("accessed_on", { withTimezone: false }).notNull(),
     browser: text("browser"),
     is_bot: boolean("is_bot"),
     device_type: text("device_type"),
@@ -58,6 +58,16 @@ export const UrlsView = pgView("Url_View")
     .leftJoin(Visits, eq(Visits.url_id, Urls.id))
     .groupBy(Urls.id, Urls.url, Urls.created_by, Urls.created_on));
 
+// Views
+export const VisitsCountView = pgView("VisitsCount_View")
+    .as((qb) => qb.select({
+        url_id: Visits.url_id,
+        date: sql<string>`to_char(timestamp, 'YYYY-mm-dd')`.as("date"),
+        visits: count(Visits.id).as("visits"),
+    })
+    .from(Visits)
+    .groupBy(Visits.url_id,sql<string>`to_char(timestamp, 'YYYY-mm-dd')`));
+
 // Object types
 export type User = typeof Users.$inferSelect;
 export type Session = typeof Sessions.$inferSelect;
@@ -69,5 +79,10 @@ export type UrlView = {
     url: string,
     created_by: string,
     created_on: Date,
+    visits: number
+};
+export type VisitCountView = {
+    url_id: number,
+    date: string,
     visits: number
 };

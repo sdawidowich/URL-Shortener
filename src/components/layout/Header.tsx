@@ -5,7 +5,7 @@ import { Profile } from "./Profile"
 
 export function Header() {
     return (
-        <header className="flex-0 mb-8 flex flex-row flex-wrap items-center justify-between border-b border-input bg-background p-4 gap-2">
+        <header className="flex-0 flex flex-row flex-wrap items-center justify-between border-b border-input bg-background p-4 gap-2">
             <div className="flex flex-row items-center flex-grow">
                 <Link className="flex flex-row items-center" href="/">
                     <Image

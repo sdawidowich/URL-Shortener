@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { EditUrlDialog } from "./EditUrlDialog";
 import { type UrlView } from "~/server/db/schema";
+import Link from "next/link";
 
 export function ActionsDropdown({url}: {url: UrlView}) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -61,6 +62,11 @@ export function ActionsDropdown({url}: {url: UrlView}) {
                     <DropdownMenuItem onClick={() => navigator.clipboard.writeText(url.key)}>
                         Copy URL Key
                     </DropdownMenuItem>
+                    <Link href={`/myurls/${url.id}`} target="_blank">
+                        <DropdownMenuItem>
+                            View URL Details
+                        </DropdownMenuItem>
+                    </Link>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => setOpenEditDialog(true)}>
                         <Edit width={16} height={16} className="mr-1" /> Edit url
