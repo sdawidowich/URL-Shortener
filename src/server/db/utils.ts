@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from ".";
-import { type Url, Urls, UrlsView, type UrlView, type User, Users, type Visit, VisitCountView, Visits, VisitsCountView } from "./schema";
+import { type Url, Urls, UrlsView, type UrlView, type User, Users, type Visit, type VisitCountView, type VisitHrCountView, Visits, VisitsCountView, VisitsHrCountView } from "./schema";
 import { ValidateRequest } from "~/lib/auth/auth";
 import { redirect } from "next/navigation";
 import { type UserAgent } from "~/types";
@@ -76,6 +76,10 @@ export async function GetVisits(url_id: number): Promise<Visit[]> {
 
 export async function GetVisitCounts(url_id: number): Promise<VisitCountView[]> {
     return await db.select().from(VisitsCountView).where(eq(VisitsCountView.url_id, url_id)) as VisitCountView[];
+}
+
+export async function GetVisitHrCounts(url_id: number): Promise<VisitHrCountView[]> {
+    return await db.select().from(VisitsHrCountView).where(eq(VisitsHrCountView.url_id, url_id)) as VisitHrCountView[];
 }
 
 export async function InsertVisit(url_id: number, user_agent: UserAgent) {

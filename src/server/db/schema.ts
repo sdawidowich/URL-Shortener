@@ -58,7 +58,6 @@ export const UrlsView = pgView("Url_View")
     .leftJoin(Visits, eq(Visits.url_id, Urls.id))
     .groupBy(Urls.id, Urls.url, Urls.created_by, Urls.created_on));
 
-// Views
 export const VisitsCountView = pgView("VisitsCount_View")
     .as((qb) => qb.select({
         url_id: Visits.url_id,
@@ -67,6 +66,15 @@ export const VisitsCountView = pgView("VisitsCount_View")
     })
     .from(Visits)
     .groupBy(Visits.url_id,sql<string>`to_char(timestamp, 'YYYY-mm-dd')`));
+    
+export const VisitsHrCountView = pgView("VisitsHrCount_View")
+    .as((qb) => qb.select({
+        url_id: Visits.url_id,
+        date: sql<string>`to_char(timestamp, 'YYYY-mm-dd HH24:00:00')`.as("date"),
+        visits: count(Visits.id).as("visits"),
+    })
+    .from(Visits)
+    .groupBy(Visits.url_id,sql<string>`to_char(timestamp, 'YYYY-mm-dd HH24:00:00')`));
 
 // Object types
 export type User = typeof Users.$inferSelect;
@@ -82,6 +90,11 @@ export type UrlView = {
     visits: number
 };
 export type VisitCountView = {
+    url_id: number,
+    date: string,
+    visits: number
+};
+export type VisitHrCountView = {
     url_id: number,
     date: string,
     visits: number

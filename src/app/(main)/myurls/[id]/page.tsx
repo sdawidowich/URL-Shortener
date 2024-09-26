@@ -3,22 +3,15 @@ import { DetailsCard } from "~/components/layout/DetailsCard";
 import { ShortUrlCard } from "~/components/layout/ShortUrlCard";
 import { VisitsChart } from "~/components/layout/VisitsChart";
 import { Separator } from "~/components/ui/separator";
-import { VisitCountView, type Visit } from "~/server/db/schema";
-import { GetUrlViewById, GetVisitCounts, GetVisits } from "~/server/db/utils";
-import { format, toZonedTime } from "date-fns-tz";
+import { type VisitHrCountView, type VisitCountView } from "~/server/db/schema";
+import { GetUrlViewById, GetVisitCounts, GetVisitHrCounts, GetVisits } from "~/server/db/utils";
 
 export const dynamic = "force-dynamic";
 
 export default async function URLPage(ctx: { params: { id: number }}) {
     const url = await GetUrlViewById(ctx.params.id);
-    const visits: Visit[] = await GetVisits(url.id);
     const visitCounts: VisitCountView[] = await GetVisitCounts(url.id);
-
-    const visitsByDate = new Map<string, number>();
-    visitCounts.forEach(v => {
-        const date = new Date(Date.parse(v.date));
-        visitsByDate.set(format(toZonedTime(date, "UTC"), "yyyy-MM-dd", {timeZone: "UTC"}), v.visits);
-    });
+    const visitHrCounts: VisitHrCountView[] = await GetVisitHrCounts(url.id);
 
     if (!url) {
         return notFound();
@@ -37,7 +30,7 @@ export default async function URLPage(ctx: { params: { id: number }}) {
             <Separator className="my-2" />
             <h2 className="w-full text-2xl font-semibold py-2">Analytics</h2>
             <div className="w-full flex flex-col items-center">
-                <VisitsChart data={visitsByDate} xLabel="Date" yLabel="Visits" />
+                <VisitsChart hrCountData={visitHrCounts} countData={visitCounts} xLabel="Date" yLabel="Visits" />
             </div>
         </div>
     );
