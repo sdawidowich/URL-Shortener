@@ -4,7 +4,7 @@ import { ShortUrlCard } from "~/components/layout/ShortUrlCard";
 import { VisitsChart } from "~/components/layout/VisitsChart";
 import { Separator } from "~/components/ui/separator";
 import { type VisitHrCountView, type VisitCountView } from "~/server/db/schema";
-import { GetUrlViewById, GetVisitCounts, GetVisitHrCounts, GetVisits } from "~/server/db/utils";
+import { GetUrlViewById, GetVisitCounts, GetVisitHrCounts } from "~/server/db/utils";
 
 export const dynamic = "force-dynamic";
 
