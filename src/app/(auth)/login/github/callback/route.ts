@@ -23,13 +23,14 @@ export async function GET(request: Request): Promise<Response> {
 		});
 		const githubUser: GitHubUser = await githubUserResponse.json() as GitHubUser;
 
-		// Replace this with your own DB client.
 		const existingUser = await GetUserByGitHubId(githubUser.id);
 
+        console.log("1");
 		if (existingUser) {
 			const session = await lucia.createSession(existingUser.id, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
 			cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+            console.log("2");
 			return new Response(null, {
 				status: 302,
 				headers: {
@@ -38,11 +39,14 @@ export async function GET(request: Request): Promise<Response> {
 			});
 		}
 
+        console.log("3");
 		const userId = await InsertUser(githubUser.id, githubUser.login);
+        console.log("4");
 
 		const session = await lucia.createSession(userId, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 		cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+        console.log("5");
         
 		return new Response(null, {
 			status: 302,
@@ -51,6 +55,7 @@ export async function GET(request: Request): Promise<Response> {
 			}
 		});
 	} catch (e) {
+        console.log("6");
 		// the specific error message depends on the provider
         console.log(e);
 		if (e instanceof OAuth2RequestError) {
@@ -59,6 +64,7 @@ export async function GET(request: Request): Promise<Response> {
 				status: 400
 			});
 		}
+        console.log("7");
 		return new Response(null, {
 			status: 500
 		});

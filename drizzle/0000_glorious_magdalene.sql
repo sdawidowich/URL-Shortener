@@ -24,9 +24,11 @@ CREATE TABLE IF NOT EXISTS "User" (
 CREATE TABLE IF NOT EXISTS "Visit" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"url_id" integer NOT NULL,
-	"accessed_on" timestamp,
+	"accessed_on" timestamp NOT NULL,
 	"browser" text,
-	"location" text
+	"is_bot" boolean,
+	"device_type" text,
+	"os" text
 );
 --> statement-breakpoint
 DO $$ BEGIN

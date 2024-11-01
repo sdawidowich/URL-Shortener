@@ -1,5 +1,5 @@
 {
-  "id": "916aae6b-8f37-456f-800c-5de6fa7cec1d",
+  "id": "30a0adcc-caff-43f1-8609-067d43cd65b8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -170,7 +170,7 @@
           "name": "accessed_on",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "browser": {
           "name": "browser",
@@ -178,8 +178,20 @@
           "primaryKey": false,
           "notNull": false
         },
-        "location": {
-          "name": "location",
+        "is_bot": {
+          "name": "is_bot",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "device_type": {
+          "name": "device_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "os": {
+          "name": "os",
           "type": "text",
           "primaryKey": false,
           "notNull": false
