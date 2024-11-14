@@ -1,4 +1,5 @@
 import "~/styles/globals.css";
+import { Analytics } from "@vercel/analytics/react";
 
 import { Inter as FontSans } from "next/font/google";
  
@@ -17,6 +18,7 @@ export default async function RootLayout({children, }: { children: React.ReactNo
     return (
         <html lang="en" className={`${fontSans.variable}`}>
             <body className="flex flex-col h-screen">
+                <Analytics/>
                 {children}
             </body>
         </html>
